@@ -100,7 +100,7 @@ class DDModel:#Details Deblurring Model
             FGF = Conv2D(filters = 32, kernel_size = (3, 3), strides = (1,1), padding = 'same')(FdLF)
             FDF = Add()([FGF, F_])
             us = Conv2D(filters = 32*4, kernel_size = (3, 3), strides = (1,1), padding = 'same')(FDF)
-            us = Lambda(lambda x: tf.depth_to_space(x,2))(us)#x2(upsample),32
+            us = Lambda(lambda x: tf.nn.depth_to_space(x,2))(us)#x2(upsample),32
             d3 = Conv2D(filters = 3, kernel_size = (3, 3), strides = (1,1), padding = 'same')(us)
             d3 = Activation('tanh')(d3)
             d3 = Lambda(lambda x: x/2+0.5)(d3)
@@ -115,7 +115,7 @@ class DDModel:#Details Deblurring Model
             json_file = open(json_path, 'r')
             loaded_model_json = json_file.read()
             json_file.close()
-            self.model = model_from_json(loaded_model_json,custom_objects={'tf':tf})
+            self.model = model_from_json(loaded_model_json,custom_objects={'tf':tf.compat.v1})
             # load weights into new model
             self.model.load_weights(weights_path)
             print("Loaded model from disk")

@@ -1,3 +1,4 @@
+import keras
 import os
 import sys
 import argparse
